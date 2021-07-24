@@ -3,7 +3,9 @@
 #include "ui_gpclient.h"
 #include "portalauthenticator.h"
 #include "gatewayauthenticator.h"
+#include "gpshared.h"
 
+#include <QVariant>
 #include <plog/Log.h>
 #include <QIcon>
 
@@ -18,8 +20,17 @@ GPClient::GPClient(QWidget *parent)
     setFixedSize(width(), height());
     gpclient::helper::moveCenter(this);
 
-    // Restore portal from the previous settings
-    ui->portalInput->setText(settings::get("portal", "").toString());
+    PLOGI << "init server";
+
+    if (gpServer) {
+        PLOGI << "-> server from command line";
+        // set server from command line
+        ui->portalInput->setText(QVariant(gpServer).toString());
+    } else {
+        PLOGI << "-> server from settings";
+        // Restore portal from the previous settings
+        ui->portalInput->setText(settings::get("portal", "").toString());
+    }
 
     // DBus service setup
     vpn = new com::yuezk::qt::GPService("com.yuezk.qt.GPService", "/", QDBusConnection::systemBus(), this);
@@ -36,6 +47,11 @@ GPClient::~GPClient()
 {
     delete ui;
     delete vpn;
+}
+
+void GPClient::startConnection()
+{
+    doConnect();
 }
 
 void GPClient::on_connectButton_clicked()

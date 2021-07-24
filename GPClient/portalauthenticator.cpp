@@ -6,9 +6,11 @@
 #include "preloginresponse.h"
 #include "portalconfigresponse.h"
 #include "gpgateway.h"
+#include "gpshared.h"
 
 #include <plog/Log.h>
 #include <QNetworkReply>
+#include <QVariant>
 
 using namespace gpclient::helper;
 
@@ -72,6 +74,10 @@ void PortalAuthenticator::tryAutoLogin()
         PLOGI << "Trying auto login using the saved credentials";
         isAutoLogin = true;
         fetchConfig(settings::get("username").toString(), settings::get("password").toString());
+    } else if (gpAutoConnect && gpUser && gpPassword) {
+        PLOGI << "Trying auto login using the credentials from cli";
+        isAutoLogin = true;
+        fetchConfig(QVariant(gpUser).toString(), QVariant(gpPassword).toString());
     } else {
         normalAuth();
     }
@@ -93,6 +99,10 @@ void PortalAuthenticator::normalAuth()
     connect(normalLoginWindow, &NormalLoginWindow::finished, this, &PortalAuthenticator::onLoginWindowFinished);
 
     normalLoginWindow->show();
+
+    if (gpAutoConnect) {
+        normalLoginWindow->autoLogin();
+    }
 }
 
 void PortalAuthenticator::onPerformNormalLogin(const QString &username, const QString &password)

@@ -5,6 +5,25 @@ A GlobalProtect VPN client (GUI) for Linux based on Openconnect and built with Q
   <img src="screenshot.png">
 </p>
 
+## Added command line parameters
+```shell
+> gpclient [server] [user] [password] [autoConnect]
+```
+
+- **1. parameter:** global protect server name
+- **2. parameter:** user name
+- **3. parameter:** user password
+- **4. parameter:** activate auto connect if 4. parameter is "autoConnect"
+
+**examples**:
+```shell
+> gpclient myServer user@domain.com myPassword autoConnect
+> gpclient myServer user@domain.com myPassword
+> gpclient myServer user@domain.com
+> gpclient myServer
+> gpclient
+```
+
 ## Features
 
 - Similar user experience as the official client in macOS.

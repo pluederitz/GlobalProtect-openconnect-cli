@@ -2,6 +2,7 @@
 #include "gphelper.h"
 #include "loginparams.h"
 #include "preloginresponse.h"
+#include "gpshared.h"
 
 #include <QNetworkReply>
 #include <plog/Log.h>
@@ -116,6 +117,10 @@ void GatewayAuthenticator::normalAuth(QString labelUsername, QString labelPasswo
     connect(normalLoginWindow, &NormalLoginWindow::finished, this, &GatewayAuthenticator::onLoginWindowFinished);
 
     normalLoginWindow->show();
+
+    if (gpAutoConnect) {
+        normalLoginWindow->autoLogin();
+    }
 }
 
 void GatewayAuthenticator::onPerformNormalLogin(const QString &username, const QString &password)

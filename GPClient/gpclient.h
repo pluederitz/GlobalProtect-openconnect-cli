@@ -22,6 +22,8 @@ public:
 
     void activate();
 
+    void startConnection();
+
 private slots:
     void on_connectButton_clicked();
     void on_portalInput_returnPressed();

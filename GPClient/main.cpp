@@ -1,6 +1,7 @@
 #include "singleapplication.h"
 #include "gpclient.h"
 #include "enhancedwebview.h"
+#include "gpshared.h"
 
 #include <QStandardPaths>
 #include <plog/Log.h>
@@ -27,6 +28,8 @@ int main(int argc, char *argv[])
         qputenv(ENV_CDP_PORT, "12315");
     }
 
+    initGpShared(argc, argv);
+
     SingleApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
 
@@ -34,6 +37,11 @@ int main(int argc, char *argv[])
     w.show();
 
     QObject::connect(&app, &SingleApplication::instanceStarted, &w, &GPClient::activate);
+
+    if (gpAutoConnect) {
+        PLOGI << "start auto connect";
+        w.startConnection();
+    }
 
     return app.exec();
 }

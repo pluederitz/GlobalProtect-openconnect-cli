@@ -28,6 +28,7 @@ SOURCES += \
     gatewayauthenticator.cpp \
     gpgateway.cpp \
     gphelper.cpp \
+    gpshared.cpp \
     loginparams.cpp \
     main.cpp \
     normalloginwindow.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     gatewayauthenticator.h \
     gpgateway.h \
     gphelper.h \
+    gpshared.h \
     loginparams.h \
     normalloginwindow.h \
     portalauthenticator.h \
