@@ -12,6 +12,7 @@ cygwin=false
 msys=false
 darwin=false
 nonstop=false
+aarch64=false
 
 case "`uname`" in
     CYGWIN* )
@@ -25,6 +26,12 @@ case "`uname`" in
         ;;
     NONSTOP* )
         nonstop=true
+        ;;
+esac
+
+case "`uname -i`" in
+    aarch64* )
+        aarch64=true
         ;;
 esac
 
@@ -43,7 +50,11 @@ if [ ! -f "$cmake_bin" ]; then
     if [ "$darwin" = true ]; then 
         download_link="https://cmake.org/files/v$cmake_version_major.$cmake_version_minor/cmake-$cmake_version-Darwin-x86_64.tar.gz"        
     else
-        download_link="https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-linux-x86_64.tar.gz"
+        if [ "$aarch64" = true ]; then
+            download_link="https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-linux-aarch64.tar.gz"
+        else
+            download_link="https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-linux-x86_64.tar.gz"
+        fi
     fi 
 
     wget -nv --show-progress "$download_link" -O "/tmp/cmake-$cmake_version.tar.gz"  
