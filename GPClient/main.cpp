@@ -14,6 +14,7 @@
 #include "enhancedwebview.h"
 #include "sigwatch.h"
 #include "version.h"
+#include "gpshared.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +28,8 @@ int main(int argc, char *argv[])
     if (port == "") {
         qputenv(ENV_CDP_PORT, "12315");
     }
+
+    initGpShared(argc, argv);
 
     SingleApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
@@ -74,6 +77,11 @@ int main(int argc, char *argv[])
     }
     if (parser.isSet("json")) {
       QObject::connect(static_cast<VpnJson*>(vpn), &VpnJson::connected, &w, &GPClient::quit);
+    }
+
+    if (gpAutoConnect) {
+        PLOGI << "start auto connect";
+        w.startConnection();
     }
 
     return app.exec();

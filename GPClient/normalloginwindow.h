@@ -22,6 +22,8 @@ public:
 
     void setProcessing(bool isProcessing);
 
+    void autoLogin();
+
 private slots:
     void on_loginButton_clicked();
 

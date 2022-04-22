@@ -33,6 +33,8 @@ public:
 
     void doConnect();
 
+    void startConnection();
+
 private slots:
     void onSettingsButtonClicked();
     void onSettingsAccepted();

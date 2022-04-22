@@ -8,6 +8,7 @@
 #include "loginparams.h"
 #include "preloginresponse.h"
 #include "challengedialog.h"
+#include "gpshared.h"
 
 using namespace gpclient::helper;
 
@@ -132,6 +133,10 @@ void GatewayAuthenticator::normalAuth(QString labelUsername, QString labelPasswo
     connect(normalLoginWindow, &NormalLoginWindow::finished, this, &GatewayAuthenticator::onLoginWindowFinished);
 
     normalLoginWindow->show();
+
+    if (gpAutoConnect) {
+        normalLoginWindow->autoLogin();
+    }
 }
 
 void GatewayAuthenticator::onPerformNormalLogin(const QString &username, const QString &password)
@@ -141,7 +146,7 @@ void GatewayAuthenticator::onPerformNormalLogin(const QString &username, const Q
     normalLoginWindow->setProcessing(true);
     params.setUsername(username);
     params.setPassword(password);
-    
+
     authenticate();
 }
 

@@ -8,6 +8,9 @@
 #include "gatewayauthenticator.h"
 #include "settingsdialog.h"
 #include "gatewayauthenticatorparams.h"
+#include "gpshared.h"
+
+#include <QVariant>
 
 using namespace gpclient::helper;
 
@@ -27,6 +30,18 @@ GPClient::GPClient(QWidget *parent, IVpn *vpn)
 
     // Restore portal from the previous settings
     this->portal(settings::get("portal", "").toString());
+
+    PLOGI << "init server";
+
+    if (gpServer) {
+        PLOGI << "-> server from command line";
+        // set server from command line
+        this->portal(QVariant(gpServer).toString());
+    } else {
+        PLOGI << "-> server from settings";
+        // Restore portal from the previous settings
+        this->portal(settings::get("portal", "").toString());
+    }
 
     // DBus service setup
     QObject *ov = dynamic_cast<QObject*>(vpn);
@@ -77,6 +92,11 @@ void GPClient::onSettingsAccepted()
 {
     settings::save("extraArgs", settingsDialog->extraArgs());
     settings::save("clientos", settingsDialog->clientos());
+}
+
+void GPClient::startConnection()
+{
+    doConnect();
 }
 
 void GPClient::on_connectButton_clicked()
